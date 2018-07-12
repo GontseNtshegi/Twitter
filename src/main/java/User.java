@@ -1,11 +1,14 @@
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
+import java.util.HashSet;
 import java.util.Set;
 
 /**
  *
  */
 @Data
+@NoArgsConstructor
 public class User {
     public String name;
     public Integer identifier;
@@ -15,6 +18,7 @@ public class User {
     public User(String n, Integer id){
         this.name = n;
         this.identifier = id;
+        this.followers = new HashSet<Integer>() ;
         this.followers.add(id); //user can also follow himself
         this.currentTweet = null;
     }
@@ -30,5 +34,8 @@ public class User {
         tweet.nextTweet = currentTweet;
         this.currentTweet = tweet;
 
+    }
+    public String toString(){
+        return this.followers.toString();
     }
 }
