@@ -1,13 +1,45 @@
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 
 public class Twitter {
     private static Map<Integer, User> users;
-    private static int priority=0;
+    private static int priority = 0;
 
-    public static void main(String[] args){
+    public static void main(String[] args) {
 
+        Scanner input = null;
+        users = new HashMap<Integer, User>();
+        //map to hold follower and following relationship
+        Map<String, List<String>> usersFromFile = new HashMap<String, List<String>>();
+        try {
+            input = new Scanner(getFile("user.txt"));
 
-         User ward = new User("Ward", 0);
+            while (input.hasNextLine()) {
+                String line = input.nextLine();
+                String[] words = line.split("(,|\\s)+");
+                List<String> tempList = new ArrayList<String>();
+                for (int i = 0; i < words.length; i++) {
+                    if (!words[i].equalsIgnoreCase("follows") && i!=0) {
+                        tempList.add(words[i]);
+                    }
+                }
+                usersFromFile.put(words[0], tempList);//mapped all users and followers
+            }
+            int userid = 0;//unique identifier
+            for(Map.Entry<String, List<String>> entry: usersFromFile.entrySet()){
+                User user =new User(entry.getKey(), userid);
+                users.put(userid, user);
+                userid++;
+                user.addFollower();
+            }
+        } catch (IOException io) {
+            io.printStackTrace();
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+        User ward = new User("Ward", 0);
         ward.addFollower(1);
 
         User alan = new User("Alan", 1);
@@ -31,28 +63,37 @@ public class Twitter {
         showNewsFeed();
 
     }
-    private static void showNewsFeed(){
-        Map<Integer, User> sortUsers = sortUsersByName(users);
-        for(Map.Entry<Integer, User> entry: sortUsers.entrySet()){
-            Set<Integer> followers = entry.getValue().getFollowers();
-            List<Tweet> allTweets = new ArrayList<Tweet>();
-            for(int follower: followers){
-                //System.out.println(sortUsers.get(follower).name);
-                List<Tweet> tweet = sortUsers.get(follower).getCurrentTweet();
-                allTweets.addAll(tweet);
+
+    /**
+     *
+     */
+    private static void showNewsFeed() {
+        Map<Integer, User> sortUsers = sortUsersByName(users);//sort user map
+        for (Map.Entry<Integer, User> entry : sortUsers.entrySet()) {
+            Set<Integer> followers = entry.getValue().getFollowers();//get follower for this user
+            List<Tweet> allTweets = new ArrayList<Tweet>();//object to store all tweets for all followers
+            for (int follower : followers) {
+                List<Tweet> tweet = sortUsers.get(follower).getCurrentTweet();//get tweets for this follower
+                allTweets.addAll(tweet);//merge it to the list of tweets for all followers
             }
+            //sort all followers tweets based on priority
             Collections.sort(allTweets, new Comparator<Tweet>() {
                 public int compare(Tweet user1, Tweet user2) {
-                    return (user1.getPriority()+"").compareTo(user2.getPriority()+"");
+                    return (user1.getPriority() + "").compareTo(user2.getPriority() + "");
                 }
             });
             System.out.println(entry.getValue().getName());
-            for(Tweet tweet: allTweets){
-                System.out.println("\t" +"@"+sortUsers.get(tweet.getUserId())+":" + tweet.getMessage());
+            for (Tweet tweet : allTweets) {
+                System.out.println("\t" + "@" + sortUsers.get(tweet.getUserId()) + ":" + tweet.getMessage());
             }
         }
     }
-    private static Map<Integer, User> sortUsersByName(Map<Integer, User> users){
+
+    /**
+     * @param users
+     * @return
+     */
+    private static Map<Integer, User> sortUsersByName(Map<Integer, User> users) {
         //converting map to list so we can sort properly
         List<Map.Entry<Integer, User>> list = new LinkedList<Map.Entry<Integer, User>>(users.entrySet());
 
@@ -64,9 +105,20 @@ public class Twitter {
 
         //convert back the sorted list into a map
         Map<Integer, User> sortedUsers = new LinkedHashMap<Integer, User>();
-        for (Map.Entry<Integer, User> entry: list) {
+        for (Map.Entry<Integer, User> entry : list) {
             sortedUsers.put(entry.getKey(), entry.getValue());
         }
-        return  sortedUsers;
+        return sortedUsers;
     }
+
+    /**
+     *
+     * @param fileName
+     * @return
+     */
+    private static File getFile(String fileName) {
+        File file = new File(Twitter.class.getResource(fileName).getFile());
+        return file;
+    }
+
 }

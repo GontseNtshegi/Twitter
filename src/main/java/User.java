@@ -34,11 +34,7 @@ public class User {
     public void addTweet(String message, int prio){
         Tweet tweet = new Tweet(message, prio, this.identifier);
         this.currentTweet.add(tweet);
-       // tweet.nextTweet = currentTweet;
-        //if(this.currentTweet==null)
-          //  this.currentTweet = tweet;
-        //else
-          //  this.currentTweet.nextTweet = tweet;
+
     }
     public String toString(){
         return this.name;
