@@ -1,4 +1,9 @@
-package PACKAGE_NAME;
+import lombok.Data;
 
+/**
+ *
+ */
+@Data
 public class Tweet {
+
 }
