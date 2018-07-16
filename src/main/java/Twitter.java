@@ -29,7 +29,7 @@ public class Twitter {
             int userid = 0;//unique identifier
             for (Map.Entry<String, List<String>> entry : usersFromFile.entrySet()) {
                 User user = new User(entry.getKey(), userid);
-               int currentId = userid;
+               int currentId = userid;//keeps the current user
 
                 if (!users.containsValue(user)) {//assuming  users will have unique names
                     users.put(userid, user);
@@ -40,14 +40,16 @@ public class Twitter {
                     if (users.containsValue(temp)){//checks if the follower is already a user
                         for(Integer key: users.keySet()){//get all keys to find this user
                             if(users.get(key).equals(temp)) {
-                                users.get(--currentId).addFollower(key);
-                                System.out.println();
+                                users.get(users.size()-1).addFollower(key);//add to the current item
                             }
                         }
                     }
                     else {//this is not a known user so add him as a user
                         User tempUser = new User(follower, userid);
-                        users.get(currentId).addFollower(userid);//then add him as a follower
+                        for(Integer key: users.keySet()){
+                            if(users.get(key).equals(user))
+                                users.get(key).addFollower(userid);//then add him as a follower
+                        }
                         users.put(userid, tempUser);
                         userid++;
                     }
