@@ -18,6 +18,11 @@ public class User{
         this.name = n;
     }
 
+    /**
+     * Parameterised constructor for defaulting fields
+     * @param n
+     * @param id
+     */
     public User(String n, Integer id){
         this.name = n;
         this.identifier = id;
@@ -26,9 +31,18 @@ public class User{
         this.currentTweet = new LinkedList<Tweet>();
     }
 
+    /**
+     * add users this user is following
+     * @param identifier
+     */
     public void addFollower(Integer identifier){
         this.followers.add(identifier);
     }
+
+    /**
+     * Remove a user that this user is following
+     * @param identifier
+     */
     public void removeFollower(Integer identifier){
         this.followers.remove(identifier);
     }
@@ -42,6 +56,11 @@ public class User{
         return this.name;
     }
 
+    /**
+     * assume unique names or twitter handles
+     * @param o
+     * @return
+     */
     public boolean equals(Object o){
         User user = (User)o;
         return this.name.equals(user.name);

@@ -56,11 +56,12 @@ public class Twitter {
                 }
 
             }
+            //Reading the tweet file
             input = new Scanner(getFile("tweet.txt"));
             while (input.hasNextLine()){
                 String line  = input.nextLine();
                 String[] split = line.split("(>)+");
-                //asuming the file follows the formatt described
+                //asuming the file follows the format described
                 for(Integer key: users.keySet()){
                     User tempUser = new User(split[0]);
                     if(users.get(key).equals(tempUser))
@@ -82,7 +83,7 @@ public class Twitter {
     }
 
     /**
-     *
+     * Method to list all the newsfeed in this Twitter
      */
     private static void showNewsFeed() {
         Map<Integer, User> sortUsers = sortUsersByName(users);//sort user map
@@ -107,6 +108,7 @@ public class Twitter {
     }
 
     /**
+     * Method to sort users by name
      * @param users
      * @return
      */
