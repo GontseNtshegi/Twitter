@@ -17,29 +17,64 @@ public class Twitter {
 
             while (input.hasNextLine()) {
                 String line = input.nextLine();
-                String[] words = line.split("(,|\\s)+");
+                String[] words = line.split("(,|\\s)+");//removes spaces and commas
                 List<String> tempList = new ArrayList<String>();
                 for (int i = 0; i < words.length; i++) {
-                    if (!words[i].equalsIgnoreCase("follows") && i!=0) {
+                    if (!words[i].equalsIgnoreCase("follows") && i != 0) {
                         tempList.add(words[i]);
                     }
                 }
                 usersFromFile.put(words[0], tempList);//mapped all users and followers
             }
             int userid = 0;//unique identifier
-            for(Map.Entry<String, List<String>> entry: usersFromFile.entrySet()){
-                User user =new User(entry.getKey(), userid);
-                users.put(userid, user);
-                userid++;
-                user.addFollower();
+            for (Map.Entry<String, List<String>> entry : usersFromFile.entrySet()) {
+                User user = new User(entry.getKey(), userid);
+               int currentId = userid;
+
+                if (!users.containsValue(user)) {//assuming  users will have unique names
+                    users.put(userid, user);
+                    userid++;
+                }
+                for (String follower : entry.getValue()) {//go through the users this user wants to follow
+                    User temp = new User(follower, userid);
+                    if (users.containsValue(temp)){//checks if the follower is already a user
+                        for(Integer key: users.keySet()){//get all keys to find this user
+                            if(users.get(key).equals(temp)) {
+                                users.get(--currentId).addFollower(key);
+                                System.out.println();
+                            }
+                        }
+                    }
+                    else {//this is not a known user so add him as a user
+                        User tempUser = new User(follower, userid);
+                        users.get(currentId).addFollower(userid);//then add him as a follower
+                        users.put(userid, tempUser);
+                        userid++;
+                    }
+                }
+
+            }
+            input = new Scanner(getFile("tweet.txt"));
+            while (input.hasNextLine()){
+                String line  = input.nextLine();
+                String[] split = line.split("(>)+");
+                //asuming the file follows the formatt described
+                for(Integer key: users.keySet()){
+                    User tempUser = new User(split[0]);
+                    if(users.get(key).equals(tempUser))
+                        users.get(key).addTweet(split[1], priority++);
+                }
             }
         } catch (IOException io) {
             io.printStackTrace();
         }
-        catch (Exception e){
+        catch (IndexOutOfBoundsException e){
+            System.out.println("The file format is wrong: "+ e.getMessage());
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
-        User ward = new User("Ward", 0);
+        /*User ward = new User("Ward", 0);
         ward.addFollower(1);
 
         User alan = new User("Alan", 1);
@@ -58,7 +93,7 @@ public class Twitter {
         users = new HashMap<Integer, User>();
         users.put(0, ward);
         users.put(1, alan);
-        users.put(2, martin);
+        users.put(2, martin);*/
 
         showNewsFeed();
 
@@ -112,7 +147,6 @@ public class Twitter {
     }
 
     /**
-     *
      * @param fileName
      * @return
      */
