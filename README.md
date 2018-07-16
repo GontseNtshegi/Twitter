@@ -13,4 +13,4 @@ You can build the application using any IDE. or run javac Twitter.java
 You can run the application using any IDE. Alternatively run java Twitter.java
 
 ## Tests
-No tests built yet.
+Run tests using any IDE
