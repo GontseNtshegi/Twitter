@@ -1,21 +1,22 @@
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  *
  */
 @Data
 @NoArgsConstructor
-public class User {
+public class User{
     public String name;
     public Integer identifier;
     public Set<Integer> followers;
     public List<Tweet> currentTweet;
+
+    public User(String n){
+        this.name = n;
+    }
 
     public User(String n, Integer id){
         this.name = n;
@@ -36,7 +37,20 @@ public class User {
         this.currentTweet.add(tweet);
 
     }
+    @Override
     public String toString(){
         return this.name;
+    }
+
+    public boolean equals(Object o){
+        User user = (User)o;
+        return this.name.equals(user.name);
+    }
+    @Override
+    public int hashCode(){
+       int result =17;
+       result =31 * result + name.hashCode();
+
+       return result;
     }
 }
