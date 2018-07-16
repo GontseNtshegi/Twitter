@@ -74,26 +74,6 @@ public class Twitter {
         catch (Exception e) {
             e.printStackTrace();
         }
-        /*User ward = new User("Ward", 0);
-        ward.addFollower(1);
-
-        User alan = new User("Alan", 1);
-        alan.addFollower(2);
-
-        User martin = new User("Martin", 2);
-
-        ward.addFollower(2);
-        ward.addFollower(1);
-
-        alan.addTweet("If you have a procedure with 10 parameters, you probably missed some.", priority++);
-        ward.addTweet("There are only two hard things in Computer Science: cache invalidation, naming things and off-by-1 errors.", priority++);
-        alan.addTweet("Random numbers should not be generated with a method chosen at random.", priority++);
-
-
-        users = new HashMap<Integer, User>();
-        users.put(0, ward);
-        users.put(1, alan);
-        users.put(2, martin);*/
 
         showNewsFeed();
 
@@ -147,6 +127,7 @@ public class Twitter {
     }
 
     /**
+     * Read a file locally
      * @param fileName
      * @return
      */
