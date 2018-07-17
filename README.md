@@ -14,3 +14,6 @@ You can run the application using any IDE. Alternatively run java Twitter.java
 
 ## Tests
 Run tests using any IDE
+
+## Dependency
+Please make sure Lombok plugin is installed
